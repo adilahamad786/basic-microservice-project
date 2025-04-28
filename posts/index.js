@@ -10,7 +10,11 @@ app.use(bodyParser.json());
 const posts = {};
 
 app.get('/posts', (req, res) => {
-    res.send(posts);
+    try {
+        res.send(posts);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 });
 
 app.post("/posts", (req, res) => {
@@ -24,7 +28,7 @@ app.post("/posts", (req, res) => {
 
         posts[postId] = { id: postId, content};
 
-        res.send(posts);
+        res.status(201).send(posts);
     } catch (error) {
         res.status(400).send(error.message);
     }

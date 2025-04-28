@@ -10,10 +10,14 @@ const PORT = process.env.PORT || 5001;
 const commentsByPostId = {};
 
 app.get('/posts/:id/comments', (req, res) => {
-    const postId = req.params.id;
-    const postComments = commentsByPostId[postId] || [];
-
-    res.send(postComments);
+    try {
+        const postId = req.params.id;
+        const postComments = commentsByPostId[postId] || [];
+    
+        res.send(postComments);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
 });
 
 app.post('/posts/:id/comments', (req, res) => {
@@ -26,7 +30,7 @@ app.post('/posts/:id/comments', (req, res) => {
         postComments.push({ id: commentId, content });
         commentsByPostId[postId] = postComments;
     
-        res.send(postComments);
+        res.status(201).send(postComments);
     } catch (error) {
         res.status(400).send(error.message);
     }
