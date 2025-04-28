@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { randomBytes } = require('crypto');
 
 const app = express();
-const PORT = process.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 
