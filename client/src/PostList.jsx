@@ -8,7 +8,7 @@ function PostList () {
 
     const fetchPosts = useCallback(async () => {
         try {
-            const response = await axios.get('http://localhost:5000/posts');
+            const response = await axios.get('http://localhost:5002/posts');
             setPosts(response.data);
         } catch (error) {
             console.error("Error fetching posts:", error);
@@ -23,7 +23,7 @@ function PostList () {
         return <div key={post.id} className='post' style={{width: '30%', margin: '10px', padding: '10px', border: '1px solid black', borderRadius: '5px'}}>
             <div className='card-body'>
                 <h3>{post.title}</h3>
-                <CommentList postId={post.id} />
+                <CommentList comments={post.comments} />
                 <CommentCreate postId={post.id} />
             </div>
         </div>;
