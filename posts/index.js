@@ -22,13 +22,13 @@ app.get('/posts', (req, res) => {
 app.post("/posts", (req, res) => {
     try {
         const postId = randomBytes(4).toString('hex');
-        const content = req.body.content;
+        const title = req.body.title;
 
-        if (!req.body && !content) {
+        if (!req.body && !title) {
             throw new Error("Please provide post content!");
         }
 
-        posts[postId] = { id: postId, content};
+        posts[postId] = { id: postId, title};
 
         res.status(201).send(posts);
     } catch (error) {
