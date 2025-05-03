@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const { randomBytes } = require('crypto');
 const cors = require('cors');
+const axios = require('axios');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,7 +23,7 @@ app.get('/posts/:id/comments', (req, res) => {
     }
 });
 
-app.post('/posts/:id/comments', (req, res) => {
+app.post('/posts/:id/comments', async (req, res) => {
     try {
         const { content } = req.body;
         const postId = req.params.id;
@@ -32,7 +33,22 @@ app.post('/posts/:id/comments', (req, res) => {
         postComments.push({ id: commentId, content });
         commentsByPostId[postId] = postComments;
     
+        await axios.post('http://localhost:5003/events', {
+            type: 'CommentCreated',
+            data: { id: commentId, content, postId }
+        });
+
         res.status(201).send(postComments);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+app.post('/events', (req, res) => {
+    try {
+        console.log('Received event:', req.body.type);
+
+        res.send({ status: 'OK' });
     } catch (error) {
         res.status(400).send(error.message);
     }
