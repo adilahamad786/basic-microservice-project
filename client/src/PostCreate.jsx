@@ -6,7 +6,7 @@ function PostCreate() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:5000/posts', { title });
+        await axios.post('http://localhost:5000/posts', { content: title });
         setTitle('');
     }
 
