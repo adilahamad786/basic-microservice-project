@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5002;
 
 const commentsByPostId = {};
 
@@ -33,7 +33,7 @@ app.post('/posts/:id/comments', async (req, res) => {
         postComments.push({ id: commentId, content });
         commentsByPostId[postId] = postComments;
     
-        await axios.post('http://localhost:5003/events', {
+        await axios.post('http://localhost:5000/events', {
             type: 'CommentCreated',
             data: { id: commentId, content, postId }
         });

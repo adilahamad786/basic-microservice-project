@@ -8,7 +8,7 @@ function PostList () {
 
     const fetchPosts = useCallback(async () => {
         try {
-            const response = await axios.get('http://localhost:5002/posts');
+            const response = await axios.get('http://localhost:5003/posts');
             setPosts(response.data);
         } catch (error) {
             console.error("Error fetching posts:", error);

@@ -5,7 +5,7 @@ const cors = require('cors');
 const axios = require('axios');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -31,7 +31,7 @@ app.post("/posts", async (req, res) => {
 
         posts[postId] = { id: postId, title};
 
-        await axios.post('http://localhost:5003/events', {
+        await axios.post('http://localhost:5000/events', {
             type: 'PostCreated',
             data: { id: postId, title }
         });
