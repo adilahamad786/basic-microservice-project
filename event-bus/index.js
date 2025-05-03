@@ -17,7 +17,7 @@ app.post('/events', async (req, res) => {
         await axios.post('http://localhost:5001/events', event); // Posts service
         await axios.post('http://localhost:5002/events', event); // Comments service
         await axios.post('http://localhost:5003/events', event); // Query service
-
+        await axios.post('http://localhost:5004/events', event); // Moderation service
         res.send({ status: 'OK' });
     } catch (error) {
         console.error("Error sending event:", error.message);
