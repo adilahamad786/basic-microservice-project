@@ -13,10 +13,7 @@ app.use(cors());
 const posts = {};
 
 app.get('/posts', async (req, res) => {
-    // const postId = req.params.id;
     try {
-        // const postComments = posts[postId] || [];
-        // res.send(postComments);
         res.send(posts);
     } catch (error) {
         res.status(400).send(error.message);
@@ -25,14 +22,14 @@ app.get('/posts', async (req, res) => {
 
 app.post('/events', async (req, res) => {
     console.log('Received event:', req.body.type);
+    const {type, data} = req.body;
 
-    if (req.body.type === 'PostCreated') {
-        const { id, title } = req.body.data;
-        posts[id] = { id, title };
+    if (type === 'PostCreated') {
+        const { id, title } = data;
+        posts[id] = { id, title, comments: [] };
     }
-    else if (req.body.type === 'CommentCreated') {
-        const { id, content, postId } = req.body.data;
-        posts[postId].comments = posts[postId].comments || [];
+    else if (type === 'CommentCreated') {
+        const { id, content, postId } = data;
         posts[postId].comments.push({ id, content });
     }
 
