@@ -9,19 +9,31 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post('/events', async (req, res) => {
+const events = [];
+
+app.post('/events', (req, res) => {
     const event = req.body;
     console.log('Comming Event:', event.type);
 
+    events.push(event);
+
     try {
-        await axios.post('http://localhost:5001/events', event); // Posts service
-        await axios.post('http://localhost:5002/events', event); // Comments service
-        await axios.post('http://localhost:5003/events', event); // Query service
-        await axios.post('http://localhost:5004/events', event); // Moderation service
+        axios.post('http://localhost:5001/events', event).catch(error => console.log(error.message)); // Posts service
+        axios.post('http://localhost:5002/events', event).catch(error => console.log(error.message)); // Comments service
+        axios.post('http://localhost:5003/events', event).catch(error => console.log(error.message)); // Query service
+        axios.post('http://localhost:5004/events', event).catch(error => console.log(error.message)); // Moderation service
         res.send({ status: 'OK' });
     } catch (error) {
         console.error("Error sending event:", error.message);
         res.status(500).send({ error: 'Failed to send event' });
+    }
+});
+
+app.get('/events', (req, res) => {
+    try {
+        res.send(events);
+    } catch (error) {
+        res.status(400).send(error.message);
     }
 });
 

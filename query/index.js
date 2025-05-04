@@ -12,18 +12,7 @@ app.use(cors());
 
 const posts = {};
 
-app.get('/posts', async (req, res) => {
-    try {
-        res.send(posts);
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-});
-
-app.post('/events', async (req, res) => {
-    console.log('Received event:', req.body.type);
-    const {type, data} = req.body;
-
+const handleEvents = (type, data) => {
     if (type === 'PostCreated') {
         const { id, title } = data;
         posts[id] = { id, title, comments: [] };
@@ -40,10 +29,33 @@ app.post('/events', async (req, res) => {
             comment.status = status;
         }
     }
+};
+
+app.get('/posts', async (req, res) => {
+    try {
+        res.send(posts);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+app.post('/events', async (req, res) => {
+    console.log('Received event:', req.body.type);
+    const {type, data} = req.body;
+
+    handleEvents(type, data);
 
     res.send({ status: 'OK' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Query service listening on port ${PORT}`);
+
+    const response = await axios.get("http://localhost:5000/events");
+    const events = response.data;
+    
+    for (let event of events) {
+        const {type, data} = event;
+        handleEvents(type, data);
+    }
 });
