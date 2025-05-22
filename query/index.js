@@ -49,13 +49,17 @@ app.post('/events', async (req, res) => {
 });
 
 app.listen(PORT, async () => {
-    console.log(`Query service listening on port ${PORT}`);
-
-    const response = await axios.get("http://localhost:5000/events");
-    const events = response.data;
+    try {
+        console.log(`Query service listening on port ${PORT}`);
     
-    for (let event of events) {
-        const {type, data} = event;
-        handleEvents(type, data);
+        const response = await axios.get("http://localhost:5000/events");
+        const events = response.data;
+        
+        for (let event of events) {
+            const {type, data} = event;
+            handleEvents(type, data);
+        }
+    } catch (error) {
+        console.error('Error fetching events:', error.message);
     }
 });
